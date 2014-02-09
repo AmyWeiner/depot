@@ -14,15 +14,16 @@
 # We make no guarantees that this code is fit for any purpose. 
 # Visit http://www.pragmaticprogrammer.com/titles/rails4 for more book information.
 #---
-class Product < ActiveRecord::Base
-  default_scope :order => 'title'
+require 'test_helper'
 
-  # validation stuff...
+class StoreControllerTest < ActionController::TestCase
+  test "should get index" do
+    get :index
+    assert_response :success
+    assert_select '#columns #side a', :minimum => 4
+    assert_select '#main .entry', 3
+    assert_select 'h3', 'Programming Ruby 1.9'
+    assert_select '.price', /\$[,\d]+\.\d\d/
+  end
 
-
-  validates :title, :description, :image_url, :presence => true
-  validates :price, :numericality => {:greater_than_or_equal_to => 0.01}
-  validates :title, :uniqueness => true
-  
-  validates :title, :length => {:minimum => 10}
 end
